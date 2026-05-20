@@ -170,18 +170,22 @@ body {
 }
 
 .theme-holo .punch {
-  border-radius: 0;
+  background-color: currentColor;
+  box-shadow: inset 0 0 0 2px currentColor;
+
   clip-path: polygon(
     50% 0%,
-    63% 18%,
-    85% 20%,
-    70% 40%,
-    78% 62%,
-    50% 52%,
-    22% 62%,
-    30% 40%,
-    15% 20%,
-    37% 18%
+    61% 18%,
+    80% 20%,
+    72% 40%,
+    85% 60%,
+    60% 55%,
+    50% 100%,
+    40% 55%,
+    15% 60%,
+    28% 40%,
+    20% 20%,
+    39% 18%
   );
 }
 
