@@ -47,6 +47,9 @@ function renderCards() {
 
     card.innerHTML = `
       <div class="card-title">${goal.title}</div>
+      <div class="card-icon">
+  ${getThemeIcon(goal.theme)}
+</div>
       <div class="card-reward">🎁 ${goal.reward || "No reward"}</div>
 
       <div class="progress-text">
@@ -64,6 +67,29 @@ function renderCards() {
 
     cardsWrapper.appendChild(card);
   });
+}
+function getThemeIcon(theme) {
+
+  switch (theme) {
+
+    case "theme-pink":
+      return "○";
+
+    case "theme-purple":
+      return "❤";
+
+    case "theme-blue":
+      return "◇";
+
+    case "theme-holo":
+      return "✿";
+
+    case "theme-star":
+      return "★";
+
+    default:
+      return "•";
+  }
 }
 
 // =========================
@@ -99,22 +125,26 @@ document.addEventListener("click", async (e) => {
   // =========================
   if (punch) {
 
-    const wrapper = punch.closest(".punches");
-    const id = wrapper.dataset.id;
+  const wrapper = punch.closest(".punches");
+  const id = wrapper.dataset.id;
 
-    const goal = goals.find(g => g.id === id);
+  const goal = goals.find(g => g.id === id);
+  if (!goal || goal.completed) return;
 
-    if (!goal || goal.completed) return;
+  const index = Number(punch.dataset.index);
 
-    const newCurrent = Math.min(goal.current + 1, goal.target);
+  // ❗ если уже закрашен — ничего не делаем
+  if (index < goal.current) return;
 
-    await updateDoc(doc(db, "goals", id), {
-      current: newCurrent,
-      completed: newCurrent >= goal.target
-    });
+  const newCurrent = index + 1;
 
-    return;
-  }
+  await updateDoc(doc(db, "goals", id), {
+    current: newCurrent,
+    completed: newCurrent >= goal.target
+  });
+
+  return;
+}
 
   // =========================
   // RESET
