@@ -71,33 +71,33 @@ body {
 .punches {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 20px;
 }
 
 /* PUNCH BASE */
 .punch {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
 
-  display: inline-block;
+  cursor: pointer;
 
-  background: transparent;
-  box-shadow: inset 0 0 0 2px currentColor;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 
-  border-radius: 10px;
-
-  transition: transform 0.15s ease, background 0.2s ease;
+  fill: transparent;
+  stroke: currentColor;
+  stroke-width: 1.8;
 }
 
 /* FILLED */
 .punch.filled {
-  background: currentColor;
+  fill: currentColor;
+  stroke: currentColor;
 }
 
 /* ACTIVE PRESS */
 .punch:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
 
 /* RESET BUTTON */
