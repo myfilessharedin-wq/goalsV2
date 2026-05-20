@@ -40,6 +40,7 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
   goals = newGoals;
 
   renderCards();
+  renderNav();
 });
 
 // =========================
@@ -156,7 +157,16 @@ function getShape(theme) {
 // CLICK HANDLER
 // =========================
 document.addEventListener("click", async (e) => {
+const delBtn = e.target.closest("[data-delete]");
 
+if (delBtn) {
+
+  const id = delBtn.dataset.delete;
+
+  await deleteDoc(doc(db, "goals", id));
+
+  return;
+}
   // =========================
   // PUNCH CLICK
   // =========================
@@ -222,3 +232,46 @@ document.addEventListener("click", async (e) => {
     return;
   }
 });
+
+function renderNav() {
+  const nav = document.getElementById("goalNav");
+  nav.innerHTML = "";
+
+  goals.forEach((g) => {
+    const item = document.createElement("div");
+    item.className = "goal-nav-item";
+    item.textContent = g.title;
+
+    item.onclick = () => {
+      const card = document.querySelector(`[data-id="${g.id}"]`);
+      if (card) {
+        card.scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+    };
+
+    nav.appendChild(item);
+  });
+}
+
+document.getElementById("addBtn").onclick = async () => {
+
+  const title = document.getElementById("title").value.trim();
+  const target = Number(document.getElementById("target").value);
+  const reward = document.getElementById("reward").value.trim();
+
+  if (!title || !target || target <= 0) return;
+
+  await addDoc(collection(db, "goals"), {
+    title,
+    target,
+    current: 0,
+    reward: reward || "",
+    checked: Array(target).fill(false),
+    completed: false,
+    theme: "theme-blue"
+  });
+
+  document.getElementById("title").value = "";
+  document.getElementById("target").value = "";
+  document.getElementById("reward").value = "";
+};
