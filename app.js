@@ -162,41 +162,43 @@ document.addEventListener("click", async (e) => {
   // =========================
   const punch = e.target.closest(".punch");
 
-  if (punch) {
+ if (punch) {
 
-    const wrapper = punch.closest(".punches");
-    const id = wrapper.dataset.id;
+  const wrapper = punch.closest(".punches");
+  const id = wrapper.dataset.id;
 
-    const goal = goals.find(g => g.id === id);
-    if (!goal || goal.completed) return;
+  const goal = goals.find(g => g.id === id);
+  if (!goal || goal.completed) return;
 
-    const index = Number(punch.dataset.index);
+  const index = Number(punch.dataset.index);
 
-    const updated = [...(goal.checked || [])];
+  const updated = [...(goal.checked || [])];
 
-    // уже заполнен → ничего не делаем
-    if (updated[index]) return;
-
-    updated[index] = true;
-
-    const newCurrent = updated.filter(Boolean).length;
-    const newCompleted = newCurrent >= goal.target;
-
-    // 🔥 только Firebase — UI обновится через onSnapshot
-    await updateDoc(doc(db, "goals", id), {
-      checked: updated,
-      current: newCurrent,
-      completed: newCompleted
-    });
-
-    // лёгкая вибрация (без анимаций DOM)
-    if (navigator.vibrate) {
-      navigator.vibrate(15);
+  // защита массива
+  if (updated.length < goal.target) {
+    for (let i = 0; i < goal.target; i++) {
+      updated[i] = updated[i] || false;
     }
-
-    return;
   }
 
+  // 🔁 TOGGLE (вот главное изменение)
+  updated[index] = !updated[index];
+
+  const newCurrent = updated.filter(Boolean).length;
+  const newCompleted = newCurrent >= goal.target;
+
+  await updateDoc(doc(db, "goals", id), {
+    checked: updated,
+    current: newCurrent,
+    completed: newCompleted
+  });
+
+  if (navigator.vibrate) {
+    navigator.vibrate(15);
+  }
+
+  return;
+}
   // =========================
   // RESET
   // =========================
