@@ -95,7 +95,10 @@ function renderPunches(goal) {
         data-index="${i}"
         viewBox="0 0 24 24"
       >
-        ${getPunchPath(goal.theme)}
+
+        <!-- простая форма (кружок, чтобы точно не ломалось) -->
+        <circle cx="12" cy="12" r="8"></circle>
+
       </svg>
     `;
   }
