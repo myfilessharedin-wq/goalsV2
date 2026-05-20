@@ -12,7 +12,7 @@ import {
 const cardsWrapper = document.getElementById("cardsWrapper");
 
 const fabBtn = document.getElementById("fabBtn");
-const goalModal = document.getElementById("goalModal");
+const addModal = document.getElementById("addModal");
 const closeModal = document.getElementById("closeModal");
 const addBtn = document.getElementById("addBtn");
 
@@ -26,11 +26,11 @@ let goals = [];
 // MODAL
 // =========================
 function openModal() {
-  goalModal.classList.add("open");
+  addModal.classList.remove("hidden");
 }
 
 function closeGoalModal() {
-  goalModal.classList.remove("open");
+  addModal.classList.add("hidden");
 }
 
 function clearInputs() {
@@ -43,8 +43,14 @@ fabBtn?.addEventListener("click", openModal);
 
 closeModal?.addEventListener("click", closeGoalModal);
 
-goalModal?.addEventListener("click", (e) => {
-  if (e.target === goalModal) {
+addModal?.addEventListener("click", (e) => {
+  if (e.target === addModal) {
+    closeGoalModal();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
     closeGoalModal();
   }
 });
