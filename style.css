@@ -171,26 +171,27 @@ width: 40px;
 }
 
 .theme-holo .punch {
-  background-color: currentColor;
+  background: transparent;
   box-shadow: inset 0 0 0 2px currentColor;
 
   clip-path: polygon(
     50% 0%,
-    61% 18%,
-    80% 20%,
-    72% 40%,
-    85% 60%,
-    60% 55%,
+    65% 18%,
+    85% 25%,
+    70% 45%,
+    85% 65%,
+    55% 55%,
     50% 100%,
-    40% 55%,
-    15% 60%,
-    28% 40%,
-    20% 20%,
-    39% 18%
+    45% 55%,
+    15% 65%,
+    30% 45%,
+    15% 25%,
+    35% 18%
   );
 }
 
-.theme-star .punch {
+
+..theme-star .punch {
   background: transparent;
   box-shadow: inset 0 0 0 2px currentColor;
 
@@ -207,8 +208,9 @@ width: 40px;
     39% 35%
   );
 }
+/* ✔ filled */
 .theme-star .punch.filled {
-  animation: starFlash 0.25s ease;
+  background: currentColor;
 }
 
 @keyframes starFlash {
@@ -227,8 +229,10 @@ width: 40px;
   100% { transform: scale(1); }
 }
 
+/* ✔ filled */
 .theme-holo .punch.filled {
-  animation: flowerPop 0.3s ease;
+  background: currentColor;
+  opacity: 0.9;
 }
 
 @keyframes flowerPop {
