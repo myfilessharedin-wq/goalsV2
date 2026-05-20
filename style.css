@@ -40,12 +40,12 @@ body {
 .card {
   min-width: 320px;
   width: 320px;
+  max-width: 320px; /* 🔥 важно */
   border-radius: 24px;
   padding: 20px;
-
   flex-shrink: 0;
+  overflow: hidden; /* 🔥 не даём вылезать */
   scroll-snap-align: center;
-
   background: white;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
