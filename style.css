@@ -101,36 +101,35 @@ body {
 /* THEMES */
 
 .theme-pink {
-  background: linear-gradient(135deg, #ffd6e7, #fff0f6);
-  color: #c64276;
+  background: #364f49;
+  color: #fdfaf1;
 }
 
 .theme-purple {
-  background: linear-gradient(135deg, #e5dcff, #f6f2ff);
-  color: #6941c6;
+  background: #e5a4c6;
+  color: #9f2a3c;
 }
 
 .theme-blue {
-  background: linear-gradient(135deg, #d9ecff, #f2f8ff);
-  color: #2d6cdf;
+  background: #b1c29e;
+  color: #fefffb;
 }
 
 .theme-holo {
-  background: linear-gradient(
-    135deg,
-    #ffd6f7,
-    #dff3ff,
-    #fff7d6
-  );
-  color: #6b4eff;
-  box-shadow: 0 8px 30px rgba(140, 110, 255, 0.2);
+  background: #8d8ebe;
+  color: #fbb3c9;
 }
 
 .theme-star {
-  background: linear-gradient(135deg, #fff6cf, #fffbe9);
-  color: #c58a00;
+  background: #c5d6f0;
+  color: #662744;
 }
 
 .completed {
   opacity: 0.75;
+}
+.card-icon {
+  font-size: 18px;
+  margin-bottom: 10px;
+  opacity: 0.9;
 }
