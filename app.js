@@ -90,13 +90,59 @@ function renderPunches(goal) {
     const filled = checked[i] === true;
 
     html += `
-      <div class="punch ${filled ? "filled" : ""}"
-           data-index="${i}">
-      </div>
+      <svg
+        class="punch ${filled ? "filled" : ""}"
+        data-index="${i}"
+        viewBox="0 0 24 24"
+      >
+        ${getPunchPath(goal.theme)}
+      </svg>
     `;
   }
 
   return html;
+}
+//формы для разных тем
+function getPunchPath(theme) {
+
+  switch (theme) {
+
+    // ⭐ STAR
+    case "theme-star":
+      return `
+        <path d="M12 2l2.9 6.6L22 9.3l-5 4.6L18.3 21 12 17.4 5.7 21 7 13.9 2 9.3l7.1-0.7L12 2z"
+        fill="currentColor"/>
+      `;
+
+    // 🌸 FLOWER (4 лепестка, минималистично)
+    case "theme-holo":
+      return `
+        <circle cx="12" cy="7" r="3" fill="currentColor"/>
+        <circle cx="17" cy="12" r="3" fill="currentColor"/>
+        <circle cx="12" cy="17" r="3" fill="currentColor"/>
+        <circle cx="7" cy="12" r="3" fill="currentColor"/>
+        <circle cx="12" cy="12" r="2" fill="white" opacity="0.6"/>
+      `;
+
+    // 💗 HEART (purple theme)
+    case "theme-purple":
+      return `
+        <path d="M12 21s-6-4.3-9-8.5C.5 9 2.5 5 6 5c2 0 3.5 1.2 4 2 0.5-0.8 2-2 4-2 3.5 0 5.5 4 3 7.5C18 16.7 12 21 12 21z"
+        fill="currentColor"/>
+      `;
+
+    // 🔵 SIMPLE DOT (blue)
+    case "theme-blue":
+      return `
+        <circle cx="12" cy="12" r="6" fill="currentColor"/>
+      `;
+
+    // 🟢 DEFAULT (pink theme)
+    default:
+      return `
+        <circle cx="12" cy="12" r="6" fill="currentColor"/>
+      `;
+  }
 }
 
 // =========================
