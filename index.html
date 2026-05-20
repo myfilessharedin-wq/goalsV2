@@ -9,23 +9,42 @@
 <body>
 
   <main class="app">
+
     <h1 class="app-title">My Goals</h1>
-<div class="fab" id="fabBtn">+</div>
 
-<div class="add-modal hidden" id="addModal">
+    <!-- goals nav -->
+    <div class="goal-nav" id="goalNav"></div>
 
-  <div class="add-form">
-    <input id="title" placeholder="Goal">
-    <input id="target" type="number" placeholder="Target">
-    <input id="reward" placeholder="Reward">
+    <!-- cards -->
+    <section class="cards-wrapper" id="cardsWrapper"></section>
 
-    <button id="addBtn">Add</button>
-  </div>
+    <!-- FAB -->
+    <button class="fab" id="fabBtn">+</button>
 
-</div>
-    <section class="cards-wrapper" id="cardsWrapper">
-      <!-- Firebase cards will render here -->
-    </section>
+    <!-- modal -->
+    <div class="add-modal hidden" id="addModal">
+      <div class="add-form">
+
+        <input id="title" type="text" placeholder="Goal title" />
+
+        <input
+          id="target"
+          type="number"
+          min="1"
+          placeholder="Target punches"
+        />
+
+        <input
+          id="reward"
+          type="text"
+          placeholder="Reward"
+        />
+
+        <button id="addBtn">Add Goal</button>
+
+      </div>
+    </div>
+
   </main>
 
   <script type="module" src="./app.js"></script>
