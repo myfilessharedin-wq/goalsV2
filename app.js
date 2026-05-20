@@ -95,10 +95,7 @@ function renderPunches(goal) {
         data-index="${i}"
         viewBox="0 0 24 24"
       >
-
-        <!-- простая форма (кружок, чтобы точно не ломалось) -->
-        <circle cx="12" cy="12" r="8"></circle>
-
+        ${getShape(goal.theme)}
       </svg>
     `;
   }
@@ -106,48 +103,45 @@ function renderPunches(goal) {
   return html;
 }
 //формы для разных тем
-function getPunchPath(theme) {
+function getShape(theme) {
 
   switch (theme) {
 
     // ⭐ STAR
     case "theme-star":
       return `
-        <path d="M12 2l2.9 6.6L22 9.3l-5 4.6L18.3 21 12 17.4 5.7 21 7 13.9 2 9.3l7.1-0.7L12 2z"
-        fill="currentColor"/>
+        <path d="M12 2l2.9 6.6L22 9.3l-5 4.6L18.3 21 12 17.4 5.7 21 7 13.9 2 9.3l7.1-0.7L12 2z"></path>
       `;
 
-    // 🌸 FLOWER (4 лепестка, минималистично)
+    // 🌸 FLOWER (4 лепестка минималистично)
     case "theme-holo":
       return `
-        <circle cx="12" cy="7" r="3" fill="currentColor"/>
-        <circle cx="17" cy="12" r="3" fill="currentColor"/>
-        <circle cx="12" cy="17" r="3" fill="currentColor"/>
-        <circle cx="7" cy="12" r="3" fill="currentColor"/>
-        <circle cx="12" cy="12" r="2" fill="white" opacity="0.6"/>
+        <circle cx="12" cy="7" r="3"></circle>
+        <circle cx="17" cy="12" r="3"></circle>
+        <circle cx="12" cy="17" r="3"></circle>
+        <circle cx="7" cy="12" r="3"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
       `;
 
-    // 💗 HEART (purple theme)
+    // 💗 HEART
     case "theme-purple":
       return `
-        <path d="M12 21s-6-4.3-9-8.5C.5 9 2.5 5 6 5c2 0 3.5 1.2 4 2 0.5-0.8 2-2 4-2 3.5 0 5.5 4 3 7.5C18 16.7 12 21 12 21z"
-        fill="currentColor"/>
+        <path d="M12 21s-6-4.3-9-8.5C.5 9 2.5 5 6 5c2 0 3.5 1.2 4 2 0.5-0.8 2-2 4-2 3.5 0 5.5 4 3 7.5C18 16.7 12 21 12 21z"></path>
       `;
 
-    // 🔵 SIMPLE DOT (blue)
+    // 🔵 SIMPLE CIRCLE
     case "theme-blue":
       return `
-        <circle cx="12" cy="12" r="6" fill="currentColor"/>
+        <circle cx="12" cy="12" r="6"></circle>
       `;
 
-    // 🟢 DEFAULT (pink theme)
+    // default
     default:
       return `
-        <circle cx="12" cy="12" r="6" fill="currentColor"/>
+        <circle cx="12" cy="12" r="6"></circle>
       `;
   }
 }
-
 // =========================
 // CLICK HANDLER
 // =========================
