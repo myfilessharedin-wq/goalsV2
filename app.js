@@ -16,27 +16,28 @@ let goals = [];
 // =========================
 onSnapshot(collection(db, "goals"), (snapshot) => {
 
-  goals = [];
+  const newGoals = [];
 
   snapshot.forEach((docSnap) => {
     const data = docSnap.data();
 
-    // 🔥 защита от рассинхрона
     const checked = data.checked || [];
 
-    const computedCurrent = checked.filter(Boolean).length;
-    const computedCompleted = computedCurrent >= data.target;
+    const current = checked.filter(Boolean).length;
+    const completed = current >= data.target;
 
-    goals.push({
+    newGoals.push({
       id: docSnap.id,
       ...data,
       checked,
-      current: computedCurrent,
-      completed: computedCompleted
+      current,
+      completed
     });
   });
 
-  goals.sort((a, b) => a.completed - b.completed);
+  newGoals.sort((a, b) => a.completed - b.completed);
+
+  goals = newGoals;
 
   renderCards();
 });
@@ -52,6 +53,7 @@ function renderCards() {
 
     const card = document.createElement("div");
     card.className = `card ${goal.theme || ""} ${goal.completed ? "completed" : ""}`;
+    card.dataset.id = goal.id;
 
     card.innerHTML = `
       <div class="card-title">${goal.title}</div>
@@ -80,9 +82,8 @@ function renderCards() {
 // =========================
 function renderPunches(goal) {
 
-  let html = "";
-
   const checked = goal.checked || [];
+  let html = "";
 
   for (let i = 0; i < goal.target; i++) {
 
@@ -121,31 +122,24 @@ document.addEventListener("click", async (e) => {
     const updated = [...(goal.checked || [])];
 
     // уже заполнен → ничего не делаем
-   if (updated[index]) return;
+    if (updated[index]) return;
 
-updated[index] = true;
-// анимация каждый раз срабатывала (даже если быстро кликаешь), добавь “reflow reset”.
-    const punchEl = wrapper.querySelector(`[data-index="${index}"]`);
-
-if (punchEl) {
-  punchEl.classList.remove("filled");
-  void punchEl.offsetWidth; // 🔥 reset animation
-  punchEl.classList.add("filled");
-}
-    
-// ⭐ ВОТ СЮДА ДОБАВЛЯЕМ ВИБРАЦИЮ
-if (navigator.vibrate) {
-  navigator.vibrate(15);
-}
+    updated[index] = true;
 
     const newCurrent = updated.filter(Boolean).length;
     const newCompleted = newCurrent >= goal.target;
 
+    // 🔥 только Firebase — UI обновится через onSnapshot
     await updateDoc(doc(db, "goals", id), {
       checked: updated,
       current: newCurrent,
       completed: newCompleted
     });
+
+    // лёгкая вибрация (без анимаций DOM)
+    if (navigator.vibrate) {
+      navigator.vibrate(15);
+    }
 
     return;
   }
