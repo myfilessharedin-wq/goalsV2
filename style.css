@@ -71,14 +71,14 @@ body {
 .punches {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
+  gap: 12px;
   margin-bottom: 20px;
 }
 
 /* PUNCH BASE */
 .punch {
-  width: 42px;
-  height: 42px;
+  width: 56px;
+  height: 56px;
 
   cursor: pointer;
 
@@ -86,7 +86,7 @@ body {
 
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 2;
 }
 
 /* FILLED */
