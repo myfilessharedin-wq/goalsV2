@@ -70,12 +70,11 @@ body {
 }
 
 .punch {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid rgba(0,0,0,0.25);
-  cursor: pointer;
+  width: 16px;
+  height: 16px;
   transition: 0.2s ease;
+  background: transparent;
+  border: 2px solid currentColor;
 }
 
 .punch.filled {
@@ -132,4 +131,49 @@ body {
   font-size: 18px;
   margin-bottom: 10px;
   opacity: 0.9;
+}
+.theme-pink .punch {
+  border-radius: 50%;
+}
+.theme-purple .punch {
+  border-radius: 4px;
+  transform: rotate(45deg);
+}
+
+.theme-blue .punch {
+  border-radius: 0;
+  transform: rotate(45deg);
+}
+
+.theme-holo .punch {
+  border-radius: 50%;
+  position: relative;
+}
+
+.theme-holo .punch::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  box-shadow:
+    0 -4px 0 currentColor,
+    0 4px 0 currentColor,
+    -4px 0 0 currentColor,
+    4px 0 0 currentColor;
+}
+
+.theme-star .punch {
+  border-radius: 0;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
 }
