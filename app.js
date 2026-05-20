@@ -317,16 +317,3 @@ addBtn?.addEventListener("click", async () => {
   clearInputs();
   closeGoalModal();
 });
-
-fabBtn.onclick = () => {
-  addModal.classList.remove("hidden");
-};
-
-// клик по затемнению → закрыть
-addModal.onclick = (e) => {
-  if (e.target === addModal) {
-    addModal.classList.add("hidden");
-  }
-};
-
-addModal.classList.add("hidden");
