@@ -123,6 +123,16 @@ function getShape(theme) {
         <circle cx="12" cy="12" r="2"></circle>
       `;
 
+// 🌿 PINK (новый — сделаем мягкий цветок/лепесток)
+    case "theme-pink":
+      return `
+        <path d="M12 2
+                 C14 6, 18 6, 18 10
+                 C18 14, 14 14, 12 18
+                 C10 14, 6 14, 6 10
+                 C6 6, 10 6, 12 2Z"></path>
+      `;
+      
     // 💗 HEART
     case "theme-purple":
       return `
