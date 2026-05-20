@@ -68,7 +68,11 @@ function renderCards() {
       <div class="punches" data-id="${goal.id}">
         ${renderPunches(goal)}
       </div>
-
+ 
+ <button class="delete-btn" data-delete="${goal.id}">
+    Delete
+  </button>
+  
       <button class="reset-btn" data-reset="${goal.id}">
         Reset
       </button>
