@@ -121,9 +121,14 @@ document.addEventListener("click", async (e) => {
     const updated = [...(goal.checked || [])];
 
     // уже заполнен → ничего не делаем
-    if (updated[index]) return;
+   if (updated[index]) return;
 
-    updated[index] = true;
+updated[index] = true;
+
+// ⭐ ВОТ СЮДА ДОБАВЛЯЕМ ВИБРАЦИЮ
+if (navigator.vibrate) {
+  navigator.vibrate(15);
+}
 
     const newCurrent = updated.filter(Boolean).length;
     const newCompleted = newCurrent >= goal.target;
