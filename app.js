@@ -124,7 +124,15 @@ document.addEventListener("click", async (e) => {
    if (updated[index]) return;
 
 updated[index] = true;
+// анимация каждый раз срабатывала (даже если быстро кликаешь), добавь “reflow reset”.
+    const punchEl = wrapper.querySelector(`[data-index="${index}"]`);
 
+if (punchEl) {
+  punchEl.classList.remove("filled");
+  void punchEl.offsetWidth; // 🔥 reset animation
+  punchEl.classList.add("filled");
+}
+    
 // ⭐ ВОТ СЮДА ДОБАВЛЯЕМ ВИБРАЦИЮ
 if (navigator.vibrate) {
   navigator.vibrate(15);
