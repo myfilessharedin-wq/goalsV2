@@ -12,27 +12,37 @@ const cardsWrapper = document.getElementById("cardsWrapper");
 let goals = [];
 
 // =========================
-// LOAD REALTIME DATA
+// REALTIME LOAD
 // =========================
 onSnapshot(collection(db, "goals"), (snapshot) => {
 
   goals = [];
 
   snapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    // 🔥 защита от рассинхрона
+    const checked = data.checked || [];
+
+    const computedCurrent = checked.filter(Boolean).length;
+    const computedCompleted = computedCurrent >= data.target;
+
     goals.push({
       id: docSnap.id,
-      ...docSnap.data()
+      ...data,
+      checked,
+      current: computedCurrent,
+      completed: computedCompleted
     });
   });
 
-  // sort: active first
   goals.sort((a, b) => a.completed - b.completed);
 
   renderCards();
 });
 
 // =========================
-// RENDER
+// RENDER CARDS
 // =========================
 function renderCards() {
 
@@ -43,13 +53,9 @@ function renderCards() {
     const card = document.createElement("div");
     card.className = `card ${goal.theme || ""} ${goal.completed ? "completed" : ""}`;
 
-    const punchesHTML = renderPunches(goal);
-
     card.innerHTML = `
       <div class="card-title">${goal.title}</div>
-      <div class="card-icon">
-  ${getThemeIcon(goal.theme)}
-</div>
+
       <div class="card-reward">🎁 ${goal.reward || "No reward"}</div>
 
       <div class="progress-text">
@@ -57,7 +63,7 @@ function renderCards() {
       </div>
 
       <div class="punches" data-id="${goal.id}">
-        ${punchesHTML}
+        ${renderPunches(goal)}
       </div>
 
       <button class="reset-btn" data-reset="${goal.id}">
@@ -68,40 +74,19 @@ function renderCards() {
     cardsWrapper.appendChild(card);
   });
 }
-function getThemeIcon(theme) {
-
-  switch (theme) {
-
-    case "theme-pink":
-      return "○";
-
-    case "theme-purple":
-      return "❤";
-
-    case "theme-blue":
-      return "◇";
-
-    case "theme-holo":
-      return "✿";
-
-    case "theme-star":
-      return "★";
-
-    default:
-      return "•";
-  }
-}
 
 // =========================
-// PUNCH RENDER
+// RENDER PUNCHES
 // =========================
 function renderPunches(goal) {
 
   let html = "";
 
+  const checked = goal.checked || [];
+
   for (let i = 0; i < goal.target; i++) {
 
-    const filled = i < goal.current;
+    const filled = checked[i] === true;
 
     html += `
       <div class="punch ${filled ? "filled" : ""}"
@@ -118,33 +103,39 @@ function renderPunches(goal) {
 // =========================
 document.addEventListener("click", async (e) => {
 
+  // =========================
+  // PUNCH CLICK
+  // =========================
   const punch = e.target.closest(".punch");
 
-  // =========================
-  // +1 PROGRESS
-  // =========================
   if (punch) {
 
-  const wrapper = punch.closest(".punches");
-  const id = wrapper.dataset.id;
+    const wrapper = punch.closest(".punches");
+    const id = wrapper.dataset.id;
 
-  const goal = goals.find(g => g.id === id);
-  if (!goal || goal.completed) return;
+    const goal = goals.find(g => g.id === id);
+    if (!goal || goal.completed) return;
 
-  const index = Number(punch.dataset.index);
+    const index = Number(punch.dataset.index);
 
-  // ❗ если уже закрашен — ничего не делаем
-  if (index < goal.current) return;
+    const updated = [...(goal.checked || [])];
 
-  const newCurrent = index + 1;
+    // уже заполнен → ничего не делаем
+    if (updated[index]) return;
 
-  await updateDoc(doc(db, "goals", id), {
-    current: newCurrent,
-    completed: newCurrent >= goal.target
-  });
+    updated[index] = true;
 
-  return;
-}
+    const newCurrent = updated.filter(Boolean).length;
+    const newCompleted = newCurrent >= goal.target;
+
+    await updateDoc(doc(db, "goals", id), {
+      checked: updated,
+      current: newCurrent,
+      completed: newCompleted
+    });
+
+    return;
+  }
 
   // =========================
   // RESET
@@ -155,7 +146,13 @@ document.addEventListener("click", async (e) => {
 
     const id = resetBtn.dataset.reset;
 
+    const goal = goals.find(g => g.id === id);
+    if (!goal) return;
+
+    const resetChecked = Array(goal.target).fill(false);
+
     await updateDoc(doc(db, "goals", id), {
+      checked: resetChecked,
       current: 0,
       completed: false
     });
