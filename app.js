@@ -327,3 +327,68 @@ addBtn?.addEventListener("click", async () => {
   clearInputs();
   closeGoalModal();
 });
+
+document.addEventListener("click", async (e) => {
+
+  // =====================
+  // TOGGLE MENU
+  // =====================
+  const menuBtn = e.target.closest("[data-menu]");
+
+  if (menuBtn) {
+    const id = menuBtn.dataset.menu;
+    const panel = document.querySelector(`[data-menu-panel="${id}"]`);
+
+    // закрыть все другие
+    document.querySelectorAll(".menu-dropdown").forEach(m => {
+      if (m !== panel) m.classList.add("hidden");
+    });
+
+    panel.classList.toggle("hidden");
+    return;
+  }
+
+  // =====================
+  // MENU ACTIONS
+  // =====================
+  const action = e.target.closest("[data-action]");
+
+  if (action) {
+    const id = action.dataset.id;
+    const type = action.dataset.action;
+
+    const goal = goals.find(g => g.id === id);
+    if (!goal) return;
+
+    if (type === "delete") {
+      await deleteDoc(doc(db, "goals", id));
+    }
+
+    if (type === "reset") {
+      await updateDoc(doc(db, "goals", id), {
+        checked: Array(goal.target).fill(false),
+        current: 0,
+        completed: false
+      });
+    }
+
+    if (type === "edit") {
+      const newTitle = prompt("New title:", goal.title);
+      if (!newTitle) return;
+
+      await updateDoc(doc(db, "goals", id), {
+        title: newTitle
+      });
+    }
+
+    return;
+  }
+
+  // =====================
+  // CLOSE MENU ON OUTSIDE CLICK
+  // =====================
+  document.querySelectorAll(".menu-dropdown").forEach(m => {
+    m.classList.add("hidden");
+  });
+
+});
