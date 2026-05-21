@@ -43,6 +43,7 @@ function clearInputs() {
 // open
 fabBtn.addEventListener("click", () => {
   openModal();
+  console.log("modal open");
 });
 
 // close by X
