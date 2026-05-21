@@ -20,6 +20,8 @@ const addBtn = document.getElementById("addBtn");
 const titleInput = document.getElementById("title");
 const targetInput = document.getElementById("target");
 const rewardInput = document.getElementById("reward");
+const priorityInput = document.getElementById("priority");
+const priority = Number(priorityInput.value || 2);
 
 let goals = [];
 let editingGoalId = null;
@@ -109,12 +111,12 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
     });
   });
 
-  newGoals.sort((a, b) => a.completed - b.completed);
+  newGoals.sort((a, b) => {
+  if (a.completed !== b.completed) {
+    return a.completed - b.completed;
+  }
 
-  goals = newGoals;
-
-  renderCards();
-  renderNav();
+  return a.priority - b.priority;
 });
 
 // =========================
@@ -257,25 +259,24 @@ addBtn.addEventListener("click", async () => {
   const title = titleInput.value.trim();
   const target = Number(targetInput.value);
   const reward = rewardInput.value.trim();
+  const priority = Number(priorityInput.value);
 
-  if (!title || !target || target <= 0) return;
+  if (!title || !target || target <= 0 || !priority) return;
 
-  // ADD
-  if (!editingGoalId) {
-    await addDoc(collection(db, "goals"), {
-      title,
-      priority: Number(priorityInput.value),
-      target,
-      reward: reward || "",
-      current: 0,
-      checked: Array(target).fill(false),
-      completed: false,
- theme: getRandomTheme()
-    });
+  await addDoc(collection(db, "goals"), {
+    title,
+    target,
+    reward: reward || "",
+    priority,
+    current: 0,
+    checked: Array(target).fill(false),
+    completed: false,
+    theme: getRandomTheme()
+  });
 
-    closeGoalModal();
-    return;
-  }
+  clearInputs();
+  closeGoalModal();
+});
 
   // EDIT
   const goal = goals.find((g) => g.id === editingGoalId);
