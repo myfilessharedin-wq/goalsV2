@@ -21,7 +21,6 @@ const titleInput = document.getElementById("title");
 const targetInput = document.getElementById("target");
 const rewardInput = document.getElementById("reward");
 const priorityInput = document.getElementById("priority");
-const priority = Number(priorityInput.value || 2);
 
 let goals = [];
 let editingGoalId = null;
@@ -118,7 +117,7 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
 
   return a.priority - b.priority;
 });
-
+});
 // =========================
 // RENDER CARDS
 // =========================
