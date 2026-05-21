@@ -10,6 +10,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const cardsWrapper = document.getElementById("cardsWrapper");
+const goalNav = document.getElementById("goalNav");
 
 const fabBtn = document.getElementById("fabBtn");
 const addModal = document.getElementById("addModal");
@@ -21,17 +22,42 @@ const targetInput = document.getElementById("target");
 const rewardInput = document.getElementById("reward");
 
 let goals = [];
+let editingGoalId = null;
+const themes = [
+  "theme-blue",
+  "theme-pink",
+  "theme-purple",
+  "theme-star",
+  "theme-holo"
+];
 
-// =========================
+function getRandomTheme() {
+  return themes[Math.floor(Math.random() * themes.length)];
+}
 // =========================
 // MODAL
 // =========================
-function openModal() {
+function openModal(goal = null) {
   addModal.classList.remove("hidden");
+
+  if (goal) {
+    editingGoalId = goal.id;
+    titleInput.value = goal.title;
+    targetInput.value = goal.target;
+    rewardInput.value = goal.reward || "";
+    addBtn.textContent = "Save Changes";
+  } else {
+    editingGoalId = null;
+    clearInputs();
+    addBtn.textContent = "Add Goal";
+  }
 }
 
 function closeGoalModal() {
   addModal.classList.add("hidden");
+  clearInputs();
+  editingGoalId = null;
+  addBtn.textContent = "Add Goal";
 }
 
 function clearInputs() {
@@ -40,30 +66,27 @@ function clearInputs() {
   rewardInput.value = "";
 }
 
-// open
-fabBtn.addEventListener("click", () => {
-  openModal();
-  console.log("modal open");
-});
+// =========================
+// MODAL EVENTS
+// =========================
+fabBtn.addEventListener("click", () => openModal());
 
-// close by X
-closeModal?.addEventListener("click", () => {
-  closeGoalModal();
-});
+closeModal?.addEventListener("click", closeGoalModal);
 
-// close by backdrop
 addModal.addEventListener("click", (e) => {
-  if (e.target === addModal) {
-    closeGoalModal();
-  }
+  if (e.target === addModal) closeGoalModal();
 });
 
-// ESC
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeGoalModal();
+
+    document.querySelectorAll(".menu-dropdown").forEach((m) => {
+      m.classList.add("hidden");
+    });
   }
 });
+
 // =========================
 // REALTIME LOAD
 // =========================
@@ -105,7 +128,7 @@ function renderCards() {
 
     card.className = `
       card
-      ${goal.theme || ""}
+      ${goal.theme || "theme-blue"}
       ${goal.completed ? "completed" : ""}
     `;
 
@@ -186,13 +209,7 @@ function getShape(theme) {
 
     case "theme-pink":
       return `
-        <path d="
-          M12 2
-          C14 6,18 6,18 10
-          C18 14,14 14,12 18
-          C10 14,6 14,6 10
-          C6 6,10 6,12 2Z
-        "></path>
+        <path d="M12 2 C14 6,18 6,18 10 C18 14,14 14,12 18 C10 14,6 14,6 10 C6 6,10 6,12 2Z"></path>
       `;
 
     case "theme-purple":
@@ -202,22 +219,137 @@ function getShape(theme) {
 
     case "theme-blue":
     default:
-      return `
-        <circle cx="12" cy="12" r="6"></circle>
-      `;
+      return `<circle cx="12" cy="12" r="6"></circle>`;
   }
 }
+
+// =========================
+// NAV
+// =========================
+function renderNav() {
+  goalNav.innerHTML = "";
+
+  goals.forEach((goal) => {
+    const item = document.createElement("div");
+    item.className = "goal-nav-item";
+    item.textContent = goal.title;
+
+    item.onclick = () => {
+      const card = document.querySelector(`[data-id="${goal.id}"]`);
+
+      if (card) {
+        card.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest"
+        });
+      }
+    };
+
+    goalNav.appendChild(item);
+  });
+}
+
+// =========================
+// SAVE (ADD / EDIT)
+// =========================
+addBtn.addEventListener("click", async () => {
+  const title = titleInput.value.trim();
+  const target = Number(targetInput.value);
+  const reward = rewardInput.value.trim();
+
+  if (!title || !target || target <= 0) return;
+
+  // ADD
+  if (!editingGoalId) {
+    await addDoc(collection(db, "goals"), {
+      title,
+      target,
+      reward: reward || "",
+      current: 0,
+      checked: Array(target).fill(false),
+      completed: false,
+ theme: getRandomTheme()
+    });
+
+    closeGoalModal();
+    return;
+  }
+
+  // EDIT
+  const goal = goals.find((g) => g.id === editingGoalId);
+  if (!goal) return;
+
+  const newChecked = Array(target)
+    .fill(false)
+    .map((_, i) => goal.checked?.[i] || false);
+
+  const newCurrent = newChecked.filter(Boolean).length;
+  const newCompleted = newCurrent >= target;
+
+  await updateDoc(doc(db, "goals", editingGoalId), {
+    title,
+    reward,
+    target,
+    checked: newChecked,
+    current: newCurrent,
+    completed: newCompleted
+  });
+
+  closeGoalModal();
+});
 
 // =========================
 // GLOBAL CLICK HANDLER
 // =========================
 document.addEventListener("click", async (e) => {
-  // DELETE
-  const delBtn = e.target.closest("[data-delete]");
+  // MENU TOGGLE
+  const menuBtn = e.target.closest("[data-menu]");
 
-  if (delBtn) {
-    const id = delBtn.dataset.delete;
-    await deleteDoc(doc(db, "goals", id));
+  if (menuBtn) {
+    const id = menuBtn.dataset.menu;
+    const panel = document.querySelector(
+      `[data-menu-panel="${id}"]`
+    );
+
+    document.querySelectorAll(".menu-dropdown").forEach((m) => {
+      if (m !== panel) m.classList.add("hidden");
+    });
+
+    panel.classList.toggle("hidden");
+    return;
+  }
+
+  // MENU ACTIONS
+  const action = e.target.closest("[data-action]");
+
+  if (action) {
+    const id = action.dataset.id;
+    const type = action.dataset.action;
+
+    const goal = goals.find((g) => g.id === id);
+    if (!goal) return;
+
+    if (type === "delete") {
+      await deleteDoc(doc(db, "goals", id));
+    }
+
+    if (type === "reset") {
+      await updateDoc(doc(db, "goals", id), {
+        checked: Array(goal.target).fill(false),
+        current: 0,
+        completed: false
+      });
+    }
+
+    if (type === "edit") {
+      openModal(goal);
+    }
+
+    document.querySelectorAll(".menu-dropdown").forEach((m) => {
+      m.classList.add("hidden");
+    });
+
     return;
   }
 
@@ -232,12 +364,11 @@ document.addEventListener("click", async (e) => {
     if (!goal || goal.completed) return;
 
     const index = Number(punch.dataset.index);
+
     const updated = [...(goal.checked || [])];
 
-    if (updated.length < goal.target) {
-      for (let i = 0; i < goal.target; i++) {
-        updated[i] = updated[i] || false;
-      }
+    for (let i = 0; i < goal.target; i++) {
+      updated[i] = updated[i] || false;
     }
 
     updated[index] = !updated[index];
@@ -258,156 +389,8 @@ document.addEventListener("click", async (e) => {
     return;
   }
 
-  // RESET
-  const resetBtn = e.target.closest("[data-reset]");
-
-  if (resetBtn) {
-    const id = resetBtn.dataset.reset;
-
-    const goal = goals.find((g) => g.id === id);
-    if (!goal) return;
-
-    await updateDoc(doc(db, "goals", id), {
-      checked: Array(goal.target).fill(false),
-      current: 0,
-      completed: false
-    });
-
-    return;
-  }
-});
-
-// =========================
-// NAV
-// =========================
-function renderNav() {
-  const nav = document.getElementById("goalNav");
-  nav.innerHTML = "";
-
-  goals.forEach((g) => {
-    const item = document.createElement("div");
-    item.className = "goal-nav-item";
-    item.textContent = g.title;
-
-    item.onclick = () => {
-      const card = document.querySelector(`[data-id="${g.id}"]`);
-
-      if (card) {
-        card.scrollIntoView({
-          behavior: "smooth",
-          inline: "center"
-        });
-      }
-    };
-
-    nav.appendChild(item);
-  });
-}
-
-// =========================
-// ADD GOAL
-// =========================
-addBtn?.addEventListener("click", async () => {
-  const title = titleInput.value.trim();
-  const target = Number(targetInput.value);
-  const reward = rewardInput.value.trim();
-
-  if (!title || !target || target <= 0) return;
-
-  await addDoc(collection(db, "goals"), {
-    title,
-    target,
-    reward: reward || "",
-    current: 0,
-    checked: Array(target).fill(false),
-    completed: false,
-    theme: "theme-blue"
-  });
-
-  clearInputs();
-  closeGoalModal();
-});
-
-document.addEventListener("click", async (e) => {
-
-  // =====================
-  // TOGGLE MENU
-  // =====================
-  const menuBtn = e.target.closest("[data-menu]");
-
-  if (menuBtn) {
-    const id = menuBtn.dataset.menu;
-    const panel = document.querySelector(`[data-menu-panel="${id}"]`);
-
-    // закрыть все другие
-    document.querySelectorAll(".menu-dropdown").forEach(m => {
-      if (m !== panel) m.classList.add("hidden");
-    });
-
-    panel.classList.toggle("hidden");
-    return;
-  }
-
-  // =====================
-  // MENU ACTIONS
-  // =====================
-  const action = e.target.closest("[data-action]");
-
-  if (action) {
-    const id = action.dataset.id;
-    const type = action.dataset.action;
-
-    const goal = goals.find(g => g.id === id);
-    if (!goal) return;
-
-    if (type === "delete") {
-      await deleteDoc(doc(db, "goals", id));
-    }
-
-    if (type === "reset") {
-      await updateDoc(doc(db, "goals", id), {
-        checked: Array(goal.target).fill(false),
-        current: 0,
-        completed: false
-      });
-    }
-
-   if (type === "edit") {
-  const newTitle = prompt("Title:", goal.title);
-  if (newTitle === null) return;
-
-  const newReward = prompt("Reward:", goal.reward);
-  if (newReward === null) return;
-
-  const newTarget = Number(prompt("Target:", goal.target));
-  if (!newTarget || newTarget <= 0) return;
-
-  // пересобираем checked под новый target
-  const newChecked = Array(newTarget)
-    .fill(false)
-    .map((_, i) => goal.checked?.[i] || false);
-
-  const newCurrent = newChecked.filter(Boolean).length;
-  const newCompleted = newCurrent >= newTarget;
-
-  await updateDoc(doc(db, "goals", id), {
-    title: newTitle,
-    reward: newReward,
-    target: newTarget,
-    checked: newChecked,
-    current: newCurrent,
-    completed: newCompleted
-  });
-}
-
-    return;
-  }
-
-  // =====================
   // CLOSE MENU ON OUTSIDE CLICK
-  // =====================
-  document.querySelectorAll(".menu-dropdown").forEach(m => {
+  document.querySelectorAll(".menu-dropdown").forEach((m) => {
     m.classList.add("hidden");
   });
-
 });
