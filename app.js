@@ -455,3 +455,8 @@ if (!e.target.closest(".view-all-wrapper")) {
     m.classList.add("hidden");
   });
 });
+//обработчик кнопки посмотреть все
+viewAllBtn.addEventListener("click", () => {
+  viewAllDropdown.classList.toggle("hidden");
+  renderViewAll();
+});
