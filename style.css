@@ -14,12 +14,36 @@ body {
 /* APP */
 .app {
   padding-bottom: 110px;
+ padding: 24px 20px 40px;
 }
 
 .app-title {
   font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+
+  margin-bottom: 18px;
+
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 14px;
+
+  color: #2b2b2b;
+
+  background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.4));
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+.app-title::after {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-left: 10px;
+
+  border-radius: 50%;
+  background: #7c5cff;
 }
 
 /* WRAPPER */
