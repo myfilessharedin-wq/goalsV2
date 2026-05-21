@@ -46,10 +46,12 @@ function openModal(goal = null) {
     titleInput.value = goal.title;
     targetInput.value = goal.target;
     rewardInput.value = goal.reward || "";
+    priorityInput.value = goal.priority;
     addBtn.textContent = "Save Changes";
   } else {
     editingGoalId = null;
     clearInputs();
+    priorityInput.value = "2"; // желательно дефолт
     addBtn.textContent = "Add Goal";
   }
 }
@@ -65,6 +67,7 @@ function clearInputs() {
   titleInput.value = "";
   targetInput.value = "";
   rewardInput.value = "";
+  priorityInput.value = "2";
 }
 
 // =========================
