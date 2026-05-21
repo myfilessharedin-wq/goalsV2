@@ -21,26 +21,23 @@
     <!-- FAB -->
     <button class="fab" id="fabBtn">+</button>
 
-    <!-- modal -->
-    <!-- FAB -->
-<button class="fab" id="fabBtn">+</button>
+    <!-- MODAL -->
+    <div class="add-modal hidden" id="addModal">
+      <div class="add-form">
 
-<!-- modal -->
-<div class="add-modal hidden" id="addModal">
-  <div class="add-form">
+        <button class="close-modal" id="closeModal">×</button>
 
-    <button class="close-modal" id="closeModal">×</button>
+        <input id="title" type="text" placeholder="Goal title" />
+        <input id="target" type="number" min="1" placeholder="Target punches" />
+        <input id="reward" type="text" placeholder="Reward" />
 
-    <input id="title" type="text" placeholder="Goal title" />
-    <input id="target" type="number" min="1" placeholder="Target punches" />
-    <input id="reward" type="text" placeholder="Reward" />
+        <button id="addBtn">Add Goal</button>
 
-    <button id="addBtn">Add Goal</button>
-  </div>
-</div>
+      </div>
+    </div>
 
   </main>
 
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=2"></script>
 </body>
 </html>
