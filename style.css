@@ -30,6 +30,7 @@ body {
   scroll-snap-type: x mandatory;
   padding-bottom: 10px;
   -webkit-overflow-scrolling: touch;
+  align-items: flex-start;
 }
 
 .cards-wrapper::-webkit-scrollbar {
@@ -48,6 +49,8 @@ body {
   scroll-snap-align: center;
   background: white;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  align-self: flex-start;
+  height: auto;
 }
 
 .card-title {
