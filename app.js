@@ -372,14 +372,33 @@ document.addEventListener("click", async (e) => {
       });
     }
 
-    if (type === "edit") {
-      const newTitle = prompt("New title:", goal.title);
-      if (!newTitle) return;
+   if (type === "edit") {
+  const newTitle = prompt("Title:", goal.title);
+  if (newTitle === null) return;
 
-      await updateDoc(doc(db, "goals", id), {
-        title: newTitle
-      });
-    }
+  const newReward = prompt("Reward:", goal.reward);
+  if (newReward === null) return;
+
+  const newTarget = Number(prompt("Target:", goal.target));
+  if (!newTarget || newTarget <= 0) return;
+
+  // пересобираем checked под новый target
+  const newChecked = Array(newTarget)
+    .fill(false)
+    .map((_, i) => goal.checked?.[i] || false);
+
+  const newCurrent = newChecked.filter(Boolean).length;
+  const newCompleted = newCurrent >= newTarget;
+
+  await updateDoc(doc(db, "goals", id), {
+    title: newTitle,
+    reward: newReward,
+    target: newTarget,
+    checked: newChecked,
+    current: newCurrent,
+    completed: newCompleted
+  });
+}
 
     return;
   }
