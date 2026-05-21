@@ -106,17 +106,24 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
       ...data,
       checked,
       current,
-      completed
+      completed,
+      priority: data.priority || 2
     });
   });
 
   newGoals.sort((a, b) => {
-  if (a.completed !== b.completed) {
-    return a.completed - b.completed;
-  }
+    if (a.completed !== b.completed) {
+      return a.completed - b.completed;
+    }
 
-  return a.priority - b.priority;
-});
+    return a.priority - b.priority;
+  });
+
+  goals = newGoals;
+
+  // 🔥 ВАЖНО
+  renderCards();
+  renderNav();
 });
 // =========================
 // RENDER CARDS
