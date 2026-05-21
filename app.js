@@ -264,6 +264,7 @@ addBtn.addEventListener("click", async () => {
   if (!editingGoalId) {
     await addDoc(collection(db, "goals"), {
       title,
+      priority: Number(priorityInput.value),
       target,
       reward: reward || "",
       current: 0,
