@@ -219,41 +219,42 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   transition: 0.2s ease;
 }
 
-.add-form input:focus {
-  border: 1px solid rgba(255,255,255,0.5);
-  background: rgba(255,255,255,0.18);
-  transform: scale(1.01);
-}
-#addBtn {
+.add-form input {
   width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 12px;
 
-  padding: 12px 14px;
-
+  border: 1px solid #e5e5e5;
   border-radius: 14px;
 
-  border: 1px solid rgba(255,255,255,0.35);
+  font-size: 16px;   /* важно */
+  outline: none;
+  box-sizing: border-box;
+}
 
-  background: rgba(255,255,255,0.18);
-
-  color: inherit;
-
+#addBtn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 
-  font-weight: 600;
+  background: linear-gradient(135deg, #c8b6ff, #b8f2e6);
+  color: #1f1f1f;
 
-  transition: all 0.2s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+#addBtn:active {
+  transform: scale(0.98);
 }
 
 #addBtn:hover {
-  transform: translateY(-1px);
-  background: rgba(255,255,255,0.25);
-}
-
-#addBtn:focus {
-  outline: none;
-  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
 }
 
 .fab {
