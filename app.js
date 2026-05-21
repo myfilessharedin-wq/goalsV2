@@ -112,6 +112,16 @@ function renderCards() {
     card.dataset.id = goal.id;
 
     card.innerHTML = `
+      <div class="card-menu">
+        <button class="menu-btn" data-menu="${goal.id}">⋯</button>
+
+        <div class="menu-dropdown hidden" data-menu-panel="${goal.id}">
+          <div data-action="edit" data-id="${goal.id}">Edit</div>
+          <div data-action="reset" data-id="${goal.id}">Reset</div>
+          <div data-action="delete" data-id="${goal.id}">Delete</div>
+        </div>
+      </div>
+
       <div class="card-title">${goal.title}</div>
 
       <div class="card-reward">
@@ -125,14 +135,6 @@ function renderCards() {
       <div class="punches" data-id="${goal.id}">
         ${renderPunches(goal)}
       </div>
-
-      <button class="delete-btn" data-delete="${goal.id}">
-        Delete
-      </button>
-
-      <button class="reset-btn" data-reset="${goal.id}">
-        Reset
-      </button>
     `;
 
     cardsWrapper.appendChild(card);
