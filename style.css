@@ -31,6 +31,8 @@ body {
   padding-bottom: 10px;
   -webkit-overflow-scrolling: touch;
   align-items: flex-start;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .cards-wrapper::-webkit-scrollbar {
