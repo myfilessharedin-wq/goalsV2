@@ -21,6 +21,8 @@ const titleInput = document.getElementById("title");
 const targetInput = document.getElementById("target");
 const rewardInput = document.getElementById("reward");
 const priorityInput = document.getElementById("priority");
+const viewAllBtn = document.getElementById("viewAllBtn");
+const viewAllDropdown = document.getElementById("viewAllDropdown");
 
 let goals = [];
 let editingGoalId = null;
@@ -31,6 +33,31 @@ const themes = [
   "theme-star",
   "theme-holo"
 ];
+
+function renderViewAll() {
+  viewAllDropdown.innerHTML = "";
+
+  goals.forEach((goal) => {
+    const item = document.createElement("div");
+    item.className = "view-all-item";
+    item.textContent = `${goal.title}`;
+
+    item.onclick = () => {
+      const card = document.querySelector(`[data-id="${goal.id}"]`);
+
+      if (card) {
+        card.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }
+
+      viewAllDropdown.classList.add("hidden");
+    };
+
+    viewAllDropdown.appendChild(item);
+  });
+}
 
 function getRandomTheme() {
   return themes[Math.floor(Math.random() * themes.length)];
@@ -127,6 +154,7 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
   // 🔥 ВАЖНО
   renderCards();
   renderNav();
+  renderViewAll();
 });
 // =========================
 // RENDER CARDS
@@ -319,6 +347,23 @@ addBtn.addEventListener("click", async () => {
 // GLOBAL CLICK HANDLER
 // =========================
 document.addEventListener("click", async (e) => {
+  // CLOSE VIEW ALL DROPDOWN ON OUTSIDE CLICK
+const viewAllWrapper = e.target.closest(".view-all-wrapper");
+
+if (!viewAllWrapper) {
+  viewAllDropdown.classList.add("hidden");
+}
+
+// закрыть card menus
+document.querySelectorAll(".menu-dropdown").forEach((m) => {
+  m.classList.add("hidden");
+});
+
+// закрыть view all
+if (!e.target.closest(".view-all-wrapper")) {
+  viewAllDropdown.classList.add("hidden");
+}
+  
   // MENU TOGGLE
   const menuBtn = e.target.closest("[data-menu]");
 
