@@ -253,8 +253,6 @@ function renderNav() {
 }
 
 // =========================
-// SAVE (ADD / EDIT)
-// =========================
 addBtn.addEventListener("click", async () => {
   const title = titleInput.value.trim();
   const target = Number(targetInput.value);
@@ -263,6 +261,37 @@ addBtn.addEventListener("click", async () => {
 
   if (!title || !target || target <= 0 || !priority) return;
 
+  // =====================
+  // EDIT MODE
+  // =====================
+  if (editingGoalId) {
+    const goal = goals.find((g) => g.id === editingGoalId);
+    if (!goal) return;
+
+    const newChecked = Array(target)
+      .fill(false)
+      .map((_, i) => goal.checked?.[i] || false);
+
+    const newCurrent = newChecked.filter(Boolean).length;
+    const newCompleted = newCurrent >= target;
+
+    await updateDoc(doc(db, "goals", editingGoalId), {
+      title,
+      reward,
+      target,
+      checked: newChecked,
+      current: newCurrent,
+      completed: newCompleted
+    });
+
+    closeGoalModal();
+    clearInputs();
+    return;
+  }
+
+  // =====================
+  // ADD MODE
+  // =====================
   await addDoc(collection(db, "goals"), {
     title,
     target,
@@ -277,30 +306,6 @@ addBtn.addEventListener("click", async () => {
   clearInputs();
   closeGoalModal();
 });
-
-  // EDIT
-  const goal = goals.find((g) => g.id === editingGoalId);
-  if (!goal) return;
-
-  const newChecked = Array(target)
-    .fill(false)
-    .map((_, i) => goal.checked?.[i] || false);
-
-  const newCurrent = newChecked.filter(Boolean).length;
-  const newCompleted = newCurrent >= target;
-
-  await updateDoc(doc(db, "goals", editingGoalId), {
-    title,
-    reward,
-    target,
-    checked: newChecked,
-    current: newCurrent,
-    completed: newCompleted
-  });
-
-  closeGoalModal();
-});
-
 // =========================
 // GLOBAL CLICK HANDLER
 // =========================
