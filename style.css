@@ -73,17 +73,18 @@ body {
 }
 
 .menu-dropdown {
-  position: absolute;
+ position: absolute;
   right: 0;
   top: 28px;
 
-  background: white;
-  border-radius: 12px;
+  min-width: 140px;
   padding: 6px;
+  border-radius: 12px;
 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  background: rgba(30, 30, 40, 0.95);
+  color: white;
 
-  min-width: 100px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
   z-index: 50;
 }
 
@@ -91,10 +92,11 @@ body {
   padding: 8px 10px;
   cursor: pointer;
   font-size: 14px;
+  border-radius: 8px;
 }
 
 .menu-dropdown div:hover {
-  background: rgba(0,0,0,0.05);
+   background: rgba(255, 255, 255, 0.08);
 }
 .card-title {
   font-size: 22px;
