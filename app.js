@@ -23,6 +23,7 @@ const rewardInput = document.getElementById("reward");
 let goals = [];
 
 // =========================
+// =========================
 // MODAL
 // =========================
 function openModal() {
@@ -39,29 +40,29 @@ function clearInputs() {
   rewardInput.value = "";
 }
 
-fabBtn?.addEventListener("click", openModal);
+// open
+fabBtn.addEventListener("click", () => {
+  openModal();
+});
 
-closeModal?.addEventListener("click", closeGoalModal);
+// close by X
+closeModal?.addEventListener("click", () => {
+  closeGoalModal();
+});
 
-addModal?.addEventListener("click", (e) => {
+// close by backdrop
+addModal.addEventListener("click", (e) => {
   if (e.target === addModal) {
     closeGoalModal();
   }
 });
 
+// ESC
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeGoalModal();
   }
 });
-
-// ESC close
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    closeGoalModal();
-  }
-});
-
 // =========================
 // REALTIME LOAD
 // =========================
