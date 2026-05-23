@@ -466,37 +466,38 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
    ========================= */
 
 .goals-toolbar {
-  display: flex;
-  flex-direction: column;
+   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
 
-  margin: 20px 0;
+  margin: 16px 0;
 }
 
 /* SEARCH */
 #searchInput {
-  width: 100%;
-  padding: 12px 14px;
+   flex: 1;
+  min-width: 0;
 
+  padding: 12px 14px;
   border-radius: 14px;
+
   border: none;
   outline: none;
 
   font-size: 14px;
-  background: white;
+
+  background: #fff;
 }
 
 /* ROW FOR TABS + VIEW ALL */
 .tab-btn {
-  flex: 1;
-
-  padding: 10px 12px;
+   padding: 10px 14px;
 
   border: none;
   border-radius: 14px;
 
   cursor: pointer;
-
   font-size: 14px;
 
   background: #f1f1f1;
@@ -517,8 +518,7 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
 .tabs {
   display: flex;
   gap: 8px;
-  align-items: center;
-  width: 100%;
+  flex-shrink: 0;
 }
 
 /* search + tabs не должны ломать layout */
