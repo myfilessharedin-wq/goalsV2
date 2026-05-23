@@ -25,7 +25,7 @@
   </div>
 </div>
 
-    <<div class="goals-toolbar">
+  <div class="goals-toolbar">
   <input
     type="text"
     id="searchInput"
@@ -33,14 +33,23 @@
   />
 
   <div class="tabs">
-    <button class="tab-btn active" data-tab="active">
+    <button
+      id="activeTab"
+      class="tab-btn active"
+      data-tab="active"
+    >
       Active
     </button>
-    <button class="tab-btn" data-tab="completed">
+
+    <button
+      id="completedTab"
+      class="tab-btn"
+      data-tab="completed"
+    >
       Completed
     </button>
-  </div>
-</div>
+
+    <div class="view-all-wrapper">
     <!-- cards -->
     <section class="cards-wrapper" id="cardsWrapper"></section>
 
