@@ -289,71 +289,104 @@ body {
 .add-form {
   position: relative;
 
-  width: min(420px, 90%);
-  padding: 24px;
+  width: min(420px, 92%);
+  padding: 22px;
+
   border-radius: 24px;
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 
-  background: white;
-  border: 1px solid rgba(255,255,255,0.08);
+  background: #fff;
 
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.35);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+
+  animation: popIn 0.2s ease;
 }
 
+/* лёгкое появление модалки */
+@keyframes popIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
+/* INPUTS */
 .add-form input {
   width: 100%;
-
   padding: 12px 14px;
+
   border-radius: 14px;
 
- border: 1px solid rgba(255, 255, 255, 0.35) !important;
-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
- background: rgba(255, 255, 255, 0.18) !important;
- backdrop-filter: blur(6px);
-  color: inherit;
+  border: 1px solid #eee;
+  background: #fafafa;
 
   font-size: 14px;
-
   outline: none;
 
   transition: 0.2s ease;
 }
 
-.add-form input {
-  width: 100%;
-  padding: 14px 16px;
-  margin-bottom: 12px;
-
-  border: 1px solid #e5e5e5;
-  border-radius: 14px;
-
-  font-size: 16px;   /* важно */
-  outline: none;
-  box-sizing: border-box;
+.add-form input:focus {
+  border-color: #c8b6ff;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(200, 182, 255, 0.25);
 }
 
+/* BUTTON */
 #addBtn {
   width: 100%;
-  margin-top: 16px;
-  padding: 14px;
+  margin-top: 10px;
+
+  padding: 13px 14px;
+
   border: none;
   border-radius: 16px;
-  font-size: 16px;
+
+  font-size: 15px;
   font-weight: 600;
+
   cursor: pointer;
 
   background: linear-gradient(135deg, #c8b6ff, #b8f2e6);
   color: #1f1f1f;
 
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+#addBtn:active {
+  transform: scale(0.98);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+}
+
+/* CLOSE BUTTON (если есть ×) */
+.close-modal {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+
+  background: transparent;
+  border: none;
+
+  font-size: 20px;
+  cursor: pointer;
+
+  color: rgba(0,0,0,0.4);
+
+  transition: 0.2s ease;
+}
+
+.close-modal:hover {
+  color: rgba(0,0,0,0.7);
+}
 #addBtn:active {
   transform: scale(0.98);
 }
