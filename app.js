@@ -10,8 +10,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const cardsWrapper = document.getElementById("cardsWrapper");
-const goalNav = document.getElementById("goalNav");
-
 const fabBtn = document.getElementById("fabBtn");
 const addModal = document.getElementById("addModal");
 const closeModal = document.getElementById("closeModal");
@@ -153,8 +151,7 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
 
   // 🔥 ВАЖНО
   renderCards();
-  renderNav();
-  renderViewAll();
+   renderViewAll();
 });
 // =========================
 // RENDER CARDS
@@ -265,29 +262,6 @@ function getShape(theme) {
 // =========================
 // NAV
 // =========================
-function renderNav() {
-  goalNav.innerHTML = "";
-
-  goals.forEach((goal) => {
-    const item = document.createElement("div");
-    item.className = "goal-nav-item";
-    item.textContent = goal.title;
-
-    item.onclick = () => {
-      const card = document.querySelector(`[data-id="${goal.id}"]`);
-
-      if (card) {
-        card.scrollIntoView({
-          behavior: "smooth",
-          inline: "center",
-          block: "nearest"
-        });
-      }
-    };
-
-    goalNav.appendChild(item);
-  });
-}
 
 // =========================
 addBtn.addEventListener("click", async () => {
