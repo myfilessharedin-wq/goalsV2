@@ -21,9 +21,9 @@ const rewardInput = document.getElementById("reward");
 const priorityInput = document.getElementById("priority");
 const viewAllBtn = document.getElementById("viewAllBtn");
 const viewAllDropdown = document.getElementById("viewAllDropdown");
-
-let goals = [];
-let editingGoalId = null;
+const searchInput = document.getElementById("searchInput");
+const activeTab = document.getElementById("activeTab");
+const completedTab = document.getElementById("completedTab");
 const themes = [
   "theme-blue",
   "theme-pink",
@@ -31,6 +31,11 @@ const themes = [
   "theme-star",
   "theme-holo"
 ];
+
+let goals = [];
+let editingGoalId = null;
+let currentTab = "active";
+let searchQuery = "";
 
 function renderViewAll() {
   viewAllDropdown.innerHTML = "";
@@ -157,9 +162,31 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
 // RENDER CARDS
 // =========================
 function renderCards() {
-  cardsWrapper.innerHTML = "";
+  goalsContainer.innerHTML = "";
 
-  goals.forEach((goal) => {
+  let filteredGoals = goals;
+
+  // вкладки
+  if (currentTab === "active") {
+    filteredGoals = filteredGoals.filter(
+      goal => !goal.completed
+    );
+  } else {
+    filteredGoals = filteredGoals.filter(
+      goal => goal.completed
+    );
+  }
+
+  // поиск
+  if (searchQuery) {
+    filteredGoals = filteredGoals.filter((goal) =>
+      goal.title
+        .toLowerCase()
+        .includes(searchQuery)
+    );
+  }
+
+  filteredGoals.forEach((goal) => {
     const card = document.createElement("div");
 
     card.className = `
@@ -434,3 +461,31 @@ viewAllBtn.addEventListener("click", () => {
   viewAllDropdown.classList.toggle("hidden");
   renderViewAll();
 });
+
+//логика вкладок
+
+activeTab.addEventListener("click", () => {
+  currentTab = "active";
+
+  activeTab.classList.add("active");
+  completedTab.classList.remove("active");
+
+  renderCards();
+});
+
+completedTab.addEventListener("click", () => {
+  currentTab = "completed";
+
+  completedTab.classList.add("active");
+  activeTab.classList.remove("active");
+
+  renderCards();
+});
+
+//логика поиска
+searchInput.addEventListener("input", (e) => {
+  searchQuery = e.target.value.toLowerCase();
+  renderCards();
+});
+
+
