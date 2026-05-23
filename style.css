@@ -379,7 +379,7 @@ body {
   font-size: 20px;
   cursor: pointer;
 
-  color: rgba(255,188,223,0.8)
+  color: black;
 
   transition: 0.2s ease;
 }
