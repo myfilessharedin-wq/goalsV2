@@ -466,17 +466,19 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
    ========================= */
 
 .goals-toolbar {
-   display: flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
 
+  gap: 12px;
   margin: 16px 0;
+
+  flex-direction: row; /* важно */
 }
 
 /* SEARCH */
 #searchInput {
-   flex: 1;
+  flex: 1;
   min-width: 0;
 
   padding: 12px 14px;
@@ -490,9 +492,15 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   background: #fff;
 }
 
-/* ROW FOR TABS + VIEW ALL */
+/* TABS */
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .tab-btn {
-   padding: 10px 14px;
+  padding: 10px 14px;
 
   border: none;
   border-radius: 14px;
@@ -512,29 +520,4 @@ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   background: #111;
   color: #fff;
   font-weight: 600;
-}
-
-/* контейнер табов */
-.tabs {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* search + tabs не должны ломать layout */
-.goals-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* search */
-#searchInput {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 14px;
-  border: none;
-  outline: none;
-  font-size: 14px;
-  background: white;
 }
