@@ -162,7 +162,7 @@ onSnapshot(collection(db, "goals"), (snapshot) => {
 // RENDER CARDS
 // =========================
 function renderCards() {
-  goalsContainer.innerHTML = "";
+cardsWrapper.innerHTML = "";
 
   let filteredGoals = goals;
 
@@ -180,9 +180,9 @@ function renderCards() {
   // поиск
   if (searchQuery) {
     filteredGoals = filteredGoals.filter((goal) =>
-      goal.title
-        .toLowerCase()
-        .includes(searchQuery)
+      (goal.title || "")
+  .toLowerCase()
+  .includes(searchQuery.toLowerCase())
     );
   }
 
