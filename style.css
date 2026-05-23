@@ -273,24 +273,8 @@ body {
   color: #662744;
 }
 
-.goal-nav {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 10px 0;
-  margin-bottom: 12px;
-}
 
-.goal-nav-item {
-  flex-shrink: 0;
-  padding: 6px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.2);
-  color: inherit;
-  white-space: nowrap;
-}
+
 
 .delete-btn {
   margin-top: 10px;
